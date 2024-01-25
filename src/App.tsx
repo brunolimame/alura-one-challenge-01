@@ -5,7 +5,10 @@ import NenhumaMensagem from './components/nenhumaMensagem';
 import { TfiReload } from 'react-icons/tfi';
 import { FaInfoCircle } from 'react-icons/fa';
 
-const chavesSecretas = {
+type ChavesSecretas = {
+  [key: string]: string;
+};
+const chavesSecretas: ChavesSecretas = {
   e: 'enter',
   i: 'imes',
   a: 'ai',
@@ -19,7 +22,7 @@ function App() {
   const handleEncode = () => {
     let textEncode = text;
     Object.keys(chavesSecretas).map((key) => {
-      textEncode = textEncode.replace(key, chavesSecretas[key] as string);
+      textEncode = textEncode.replace(key, chavesSecretas[key]);
     });
     setTextEncode(textEncode);
   };
@@ -51,10 +54,12 @@ function App() {
                 onChange={(e) => setText(e.target.value)}
                 placeholder='Digite seu texto'
               />
-              <div className="flex flex-col gap-3">
-                <div className="text-gray-600 flex gap-1 justify-start items-center">
+              <div className='flex flex-col gap-3'>
+                <div className='text-gray-600 flex gap-1 justify-start items-center'>
                   <FaInfoCircle />
-                  <span className="text-[12px]">Apenas letras minúsculas e sem acento.</span>
+                  <span className='text-[12px]'>
+                    Apenas letras minúsculas e sem acento.
+                  </span>
                 </div>
                 <div className='flex flex-row max-md:flex-col justify-between w-full gap-8 max-md:gap-4'>
                   <Button
