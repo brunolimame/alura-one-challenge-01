@@ -4,6 +4,7 @@ import { useState } from 'react';
 import NenhumaMensagem from './components/nenhumaMensagem';
 import { TfiReload } from 'react-icons/tfi';
 import { FaInfoCircle } from 'react-icons/fa';
+import { ToastContainer, toast } from 'react-toastify';
 
 type ChavesSecretas = {
   [key: string]: string;
@@ -21,18 +22,41 @@ function App() {
 
   const handleEncode = () => {
     let textEncode = text;
+    if (textEncode.length === 0) {
+      toast.error('Texto não informado!');
+      return;
+    }
     Object.keys(chavesSecretas).map((key) => {
       textEncode = textEncode.replace(key, chavesSecretas[key]);
     });
     setTextEncode(textEncode);
+    toast.success('Texto criptografado!');
   };
 
   const handleDecode = () => {
     let textDecode = text;
+    if (textEncode.length === 0) {
+      toast.error('Texto não informado!');
+      return;
+    }
     Object.keys(chavesSecretas).map((key) => {
       textDecode = textDecode.replace(chavesSecretas[key], key);
     });
     setTextEncode(textDecode);
+    toast.success('Texto descriptografado!');
+  };
+
+  const handleCopy = () => {
+    if (!navigator.clipboard) {
+      toast.error('Seu navegador não tem suporte para copiar o texto automaticamente. Seleciona o texto com o mouse e clique em ctrl+c(Windows) ou cmd+c(MacOS).');
+      return;
+    }
+    if (textEncode.length === 0) {
+      toast.error('Texto está em branco! Nada foi copiado.');
+      return;
+    }
+    toast.success('Texto copiado para sua área de transferência.');
+    navigator.clipboard.writeText(textEncode);
   };
   const handleReset = () => {
     setText('');
@@ -95,6 +119,7 @@ function App() {
                     fullWidth
                     variant='ghost'
                     className='py-7 max-md:py-3 border-blue-900 text-blue-900 text-[16px]'
+                    onClick={handleCopy}
                   >
                     Copiar
                   </Button>
@@ -113,6 +138,17 @@ function App() {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position='top-right'
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 }
